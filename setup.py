@@ -3,6 +3,7 @@ import subprocess
 
 from setuptools import setup
 
+__version__ = 0.2
 
 def _get_git_description():
     try:
@@ -31,7 +32,7 @@ def main():
         description="A command line utility for opening a repositories corresponding jenkins build homepage.",
         author="Joeseph Rodrigues",
         author_email="dowhilegeek@gmail.com",
-        version=get_version(),
+        version=__version__,
         scripts=["open-jenkins"]
     )
 
