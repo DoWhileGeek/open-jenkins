@@ -3,7 +3,7 @@ import subprocess
 
 from setuptools import setup
 
-__version__ = "0.2.1"
+__version__ = "0.3"
 
 def _get_git_description():
     try:
