@@ -3,6 +3,7 @@
 import json
 import os
 import webbrowser
+import sys
 
 
 def main():
@@ -15,23 +16,32 @@ def main():
 def get_config():
     # Kind of robust config builder, getter, in case it grows later
     path = os.path.join(os.path.expanduser("~"), ".open-jenkinsrc")
-    c = {}
 
     try:
         with open(path) as fin:
-            c = json.load(fin)
+            return json.load(fin)
+    except IOError:
+        return build_config(path)
     except FileNotFoundError:
-        try:
-            c["url"] = input("Enter Jenkins server base url: ")
-        except KeyboardInterrupt:
-            exit(0)
+        return build_config(path)
 
-        with open(path, "w+") as fout:
-            json.dump(c, fout)
-        print("written to {}, edit at your own annoyance.".format(path))
+
+def build_config(path):
+    c = {}
+    try:
+        if sys.version_info[0] >= 3:
+            get_input = input
+        else:
+            get_input = raw_input
+        c["url"] = get_input("Enter Jenkins server base url: ")
+    except KeyboardInterrupt:
+        exit(1)
+
+    with open(path, "w+") as fout:
+        json.dump(c, fout)
+    print("written to {}, edit at your own annoyance.".format(path))
 
     return c
-
 
 def get_job_name():
     return os.path.split(os.getcwd())[-1]
